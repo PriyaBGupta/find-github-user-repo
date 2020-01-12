@@ -13,22 +13,32 @@ class App extends Component{
   nameChangeHandler=(event)=>{
     this.setState({userName:event.target.value});
   }
-  enterHandler=(event)=>{
-    const code = event.keyCode || event.which;
-    if(code === 13) {
-      if(this.state.userName){
-        axios.get('https://api.github.com/users/'+ this.state.userName +'/repos').then((response)=>{
-          this.setState({repoList:[...response.data]});
-          this.setState({error:''});
-        })
-        .catch(error=>{
-          console.log(error);
-            this.setState({error:error.response.status});
-        })
-    }
-    }
+  enterHandler=(username)=>{
+    //const code = event.keyCode || event.which;
+    //if(code === 13) {
+      this.setState({userName:username});
   }
+  // shouldComponentUpdate(nextProps,nextState){
+  //   console.log(nextState.userName , this.state.userName);
+  //   if(nextState.userName!==this.state.userName){
+  //     return true;
+  //   }else return false;
+  // }
+  // componentDidUpdate(){
+  //   if(this.state.userName){
+  //     console.log("Have I been called");
+  //     axios.get('https://api.github.com/users/'+ this.state.userName +'/repos').then((response)=>{
+  //       this.setState({repoList:[...response.data]});
+  //       this.setState({error:''});
+  //     })
+  //     .catch(error=>{
+  //       console.log(error);
+  //         this.setState({error:error.response.status});
+  //     })
+  // }
+  // }
   render(){
+    
     let repoListDisplay = null;
     if(this.state.error ===''){
       if(this.state.repoList){

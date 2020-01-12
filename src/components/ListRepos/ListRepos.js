@@ -1,8 +1,10 @@
 import React from 'react';
 const ListRepos= (props)=>{
     return(
-        <div>
-            <p>Name: {props.name}</p>
+        <div className="card">
+            <div className="card-body">
+                Name : {props.name}
+            </div>
         </div>
     )
 }

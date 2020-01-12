@@ -12,7 +12,7 @@ export default function makeAndHandleRequest(query, page = 1) {
     .then((resp) => resp.json())
     .then(({items, total_count}) => { /* eslint-disable-line camelcase */
       const options = items.map((i) => ({
-        avatar_url: i.avatar_url,
+        //avatar_url: i.avatar_url,
         id: i.id,
         login: i.login,
       }));

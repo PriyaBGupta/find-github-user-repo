@@ -3,7 +3,10 @@ import {AsyncTypeahead} from 'react-bootstrap-typeahead';
 import GithubMenuItem from '../GithubMenuItem/GithubMenuItem';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import makeAndHandleRequest from '../../util/makeAndHandleRequest';
-const PER_PAGE = 50;
+import axios from 'axios';
+import ListRepos from '../ListRepos/ListRepos';
+
+
 class UserNameInput extends Component{
   
   //properties  
@@ -11,81 +14,75 @@ class UserNameInput extends Component{
     isLoading: false,
     options: [],
     query: '',
+    repoList:null,
+    error:''
   };
   cache = {};
 
   //methods
-  handleInputChange = (query) => {
-    this.setState({query});
-  }
-  handlePagination = (e, shownResults) => {
-    const {query} = this.state;
-    const cachedQuery = this.cache[query];
-
-    // Don't make another request if:
-    // - the cached results exceed the shown results
-    // - we've already fetched all possible results
-    if (
-      cachedQuery.options.length > shownResults ||
-      cachedQuery.options.length === cachedQuery.total_count
-    ) {
-      return;
-    }
-
+  handleSearch = (query) => {
     this.setState({isLoading: true});
-
-    const page = cachedQuery.page + 1;
-
-    makeAndHandleRequest(query, page)
-      .then((resp) => {
-        const options = cachedQuery.options.concat(resp.options);
-        this.cache[query] = {...cachedQuery, options, page};
+    makeAndHandleRequest(query)
+      .then(({options}) => {
         this.setState({
           isLoading: false,
           options,
         });
       });
   }
-  handleSearch = (query) => {
-    if (this.cache[query]) {
-      this.setState({options: this.cache[query].options});
-      return;
+  handleSelection = (selected) =>{
+    if(selected[0]){
+      axios.get('https://api.github.com/users/'+ selected[0].login +'/repos').then((response)=>{
+          this.setState({repoList:[...response.data]});
+          this.setState({error:''});
+        })
+        .catch(error=>{
+          console.log(error);
+            this.setState({error:error.response.status});
+        })
+    }
+  }
+  
+  render(){
+
+    let repoListDisplay = null;
+    if(this.state.error ===''){
+      if(this.state.repoList){
+        if(this.state.repoList.length>0){
+          repoListDisplay = this.state.repoList.map(repo=>(
+          <ListRepos name={repo.name} key={repo.created_at}></ListRepos>
+          ))
+        }
+        else{
+          repoListDisplay = <p>Username doesnt have any repository to show</p>
+        }
+      }
+    }
+    else if(this.state.error === 404){
+      repoListDisplay=<p>UserName not found</p>
+    }
+    else {
+      repoListDisplay =<p>Opps dear !! Something went wrong. Try again later</p>
     }
 
-    this.setState({isLoading: true});
-    makeAndHandleRequest(query)
-      .then((resp) => {
-        this.cache[query] = {...resp, page: 1};
-        this.setState({
-          isLoading: false,
-          options: resp.options,
-        });
-      });
-  }
-  render(){
     return(
       <Fragment> 
         <AsyncTypeahead
         {...this.state}
         id="my-typeahead-id"
         labelKey="login"
-        maxResults={PER_PAGE - 1}
-        minLength={1}
-        onInputChange={this.handleInputChange}
-        onPaginate={this.handlePagination}
+        minLength={3}
         onSearch={this.handleSearch}
-        paginate
         placeholder="Search for a Github user"
+        onChange={this.handleSelection}
         renderMenuItemChildren={(option, props) => (
-          <GithubMenuItem key={option.id} user={option} />
+          <GithubMenuItem 
+          key={option.id} 
+          user={option}
+          />
         )}
         useCache={false} />
-
-        <input type="text"  
-        value={this.props.username} 
-        onChange={this.props.changed} 
-        onKeyPress={this.props.entered}
-        placeholder="Search Repository for a given username"/>
+        {repoListDisplay}
       </Fragment>
       )
   }
