@@ -3,9 +3,8 @@ import {AsyncTypeahead} from 'react-bootstrap-typeahead';
 import GithubMenuItem from '../GithubMenuItem/GithubMenuItem';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import makeAndHandleRequest from '../../util/makeAndHandleRequest';
-import axios from 'axios';
 import ListRepos from '../ListRepos/ListRepos';
-
+import makeAndHandleRepo from '../../util/makeAndHandleRepo';
 
 class UserNameInput extends Component{
   
@@ -32,14 +31,19 @@ class UserNameInput extends Component{
   }
   handleSelection = (selected) =>{
     if(selected[0]){
-      axios.get('https://api.github.com/users/'+ selected[0].login +'/repos').then((response)=>{
-          this.setState({repoList:[...response.data]});
-          this.setState({error:''});
-        })
-        .catch(error=>{
-          console.log(error);
-            this.setState({error:error.response.status});
-        })
+      makeAndHandleRepo(selected[0].login)
+      .then(response=>{
+        this.setState({repoList:[...response.repo]});
+        this.setState({error:''});
+      })
+      // axios.get('https://api.github.com/users/'+ selected[0].login +'/repos').then((response)=>{
+      //     this.setState({repoList:[...response.data]});
+      //     this.setState({error:''});
+      //   })
+      //   .catch(error=>{
+      //     console.log(error);
+      //       this.setState({error:error.response.status});
+      //   })
     }
   }
   
@@ -71,15 +75,13 @@ class UserNameInput extends Component{
         {...this.state}
         id="my-typeahead-id"
         labelKey="login"
-        minLength={3}
+        minLength={1}
         onSearch={this.handleSearch}
+        selectHintOnEnter
         placeholder="Search for a Github user"
         onChange={this.handleSelection}
         renderMenuItemChildren={(option, props) => (
-          <GithubMenuItem 
-          key={option.id} 
-          user={option}
-          />
+          <GithubMenuItem key={option.id} user={option}/>
         )}
         useCache={false} />
         {repoListDisplay}

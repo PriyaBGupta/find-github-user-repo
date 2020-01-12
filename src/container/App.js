@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react';
-import axios from 'axios';
 import UserNameInput from '../components/UserNameInput/UserNameInput';
 import './App.css';
 import ListRepos from '../components/ListRepos/ListRepos';
 
 class App extends Component{
-  state ={
+  state = {
     userName:'',
     repoList:null,
     error:''
