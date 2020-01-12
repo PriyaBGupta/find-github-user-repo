@@ -37,10 +37,7 @@ handleSearch = (query) => {
 }
 handleSelection = (selected) =>{
   if(selected[0]){
-    this.setState({
-      username : selected[0].login
-    });
-    
+    this.setState({username : selected[0].login});
   }
   else{
     this.setState({
@@ -71,9 +68,9 @@ render(){
   if(!this.state.error){
     if(this.state.repoList){
       if(this.state.repoList.length>0){
-        repoListTitle = <h5 className="text-center">Repository of {this.state.username}</h5>
+        repoListTitle = <h5 className="text-center github-repository-title">Repository of {this.state.username}</h5>
         repoListDisplay = this.state.repoList.map(repo=>(
-        <ListRepos name={repo.name} key={repo.id}></ListRepos>
+        <ListRepos repoInfo={repo} key={repo.id}></ListRepos>
         ))
       }
       else{

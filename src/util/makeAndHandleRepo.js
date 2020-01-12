@@ -11,9 +11,10 @@ export default function makeAndHandleRepo(selected) {
   return fetch(`${REPO_URI}${selected}/repos`)
     .then((resp) => resp.json())
     .then((result) => {
-      const repo = result.map((i) => ({
-        id: i.created_at,
-        name: i.name,
+      const repo = result.map((itemRepo) => ({
+        id: itemRepo.created_at,
+        name: itemRepo.name,
+        link: itemRepo.html_url
       }));
       return {repo};
     })

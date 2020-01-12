@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import classes from './SearchList.module.css';
+import './SearchList.css';
 
 const SearchList = (props) => {
   return(
@@ -8,7 +8,7 @@ const SearchList = (props) => {
     <img
       alt={props.user.login}
       src={props.user.avatarUrl}
-      className={classes['custom-logo']}
+      className='custom-logo'
     />
     <span>{props.user.login}</span>
   </div>
@@ -18,7 +18,7 @@ SearchList.propTypes = {
   user: PropTypes.shape({
     login: PropTypes.string.isRequired,
     avatarUrl:PropTypes.string.isRequired
-  }).isRequired,
+  }).isRequired
 };
 
 export default SearchList;

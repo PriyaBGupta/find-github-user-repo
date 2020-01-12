@@ -12,10 +12,10 @@ export default function makeAndHandleRequest(query, page = 1) {
     .then((resp) => resp.json())
     .then(
       ({items}) => {
-      const options = items.map((i) => ({
-        avatarUrl: i.avatar_url,
-        id: i.id,
-        login: i.login,
+      const options = items.map((optionItem) => ({
+        avatarUrl: optionItem.avatar_url,
+        id: optionItem.id,
+        login: optionItem.login,
       }));
       return {options};
     })
