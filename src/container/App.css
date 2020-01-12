@@ -1,4 +1,10 @@
-/* .github-repo-container .form-control:focus {
+.github-repo-container .form-control:focus {
     border:1px solid #00857a;
-    box-shadow: 0 0 0 0.2rem rgba(0, 220, 255, 0.25);
-} */
+    box-shadow: none
+}
+.github-repo-container .dropdown-item.active,.github-repo-container .dropdown-item:active{
+    background-color: #00857a;
+}
+.github-title{
+    color: #00857a;
+}

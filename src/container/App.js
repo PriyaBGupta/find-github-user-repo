@@ -15,6 +15,7 @@ class App extends Component{
 state = {
   isLoading: false,
   options: [],
+  username:'',
   repoList:null,
   error:false
 };
@@ -37,19 +38,9 @@ handleSearch = (query) => {
 handleSelection = (selected) =>{
   if(selected[0]){
     this.setState({
-      isLoading: true
+      username : selected[0].login
     });
-    makeAndHandleRepo(selected[0].login)
-    .then(response => {
-      this.setState({
-        error:false,
-        isLoading:false,
-        repoList:[...response.repo]
-      });
-    })
-    .catch(err => {
-      this.setState({error:true});
-    });
+    
   }
   else{
     this.setState({
@@ -58,12 +49,29 @@ handleSelection = (selected) =>{
   }
 }
 
+componentDidUpdate(prevProps,prevState){
+  if (this.state.username !== prevState.username) {
+    makeAndHandleRepo(this.state.username)
+    .then(response => {
+      this.setState({
+        error:false,
+        repoList:[...response.repo]
+      });
+    })
+    .catch(err => {
+      this.setState({error:true});
+    });
+  }
+}
+
 render(){
 
   let repoListDisplay = null;
+  let repoListTitle = null;
   if(!this.state.error){
     if(this.state.repoList){
       if(this.state.repoList.length>0){
+        repoListTitle = <h5 className="text-center">Repository of {this.state.username}</h5>
         repoListDisplay = this.state.repoList.map(repo=>(
         <ListRepos name={repo.name} key={repo.id}></ListRepos>
         ))
@@ -79,21 +87,29 @@ render(){
 
   return(
       <div className="container github-repo-container">
-        <h2 className="text-center m-4">Github Username Repository Finder</h2>
-        <AsyncTypeahead
-        {...this.state}
-        id="github-user-typeahead"
-        labelKey="login"
-        minLength={1}
-        onSearch={this.handleSearch}
-        selectHintOnEnter
-        placeholder="Search for a Github user"
-        onChange={this.handleSelection}
-        renderMenuItemChildren={(option) => (
-          <SearchList key={option.id} user={option}/>
-        )}
-        />
-        {repoListDisplay}
+        <h2 className="text-center m-4 github-title">Github Username Repository Finder</h2>
+        <div className="row justify-content-center">
+          <div className="col-6">
+            <AsyncTypeahead
+            {...this.state}
+            id="github-user-typeahead"
+            labelKey="login"
+            minLength={1}
+            onSearch={this.handleSearch}
+            selectHintOnEnter
+            placeholder="Search for a Github username"
+            onChange={this.handleSelection}
+            renderMenuItemChildren={(option) => (
+              <SearchList key={option.id} user={option}/>
+            )}
+            />
+          </div>
+          <div className="w-100"></div>
+          <div className="col-6 py-4" >
+            {repoListTitle}
+            {repoListDisplay}
+          </div>
+        </div>
       </div>
     )
 }
