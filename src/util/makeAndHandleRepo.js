@@ -16,23 +16,8 @@ export default function makeAndHandleRepo(selected) {
         name: i.name,
       }));
       return {repo};
+    })
+    .catch((err) => {
+      return {error:true}
     });
-    // .then((resp) => resp.json())
-    // .then(({items, total_count}) => { /* eslint-disable-line camelcase */
-    //   const options = items.map((i) => ({
-    //     //avatar_url: i.avatar_url,
-    //     id: i.id,
-    //     login: i.login,
-    //   }));
-    //   return {options, total_count};
-    // });
-
-    // axios.get(REPO_URI+ this.state.userName +'/repos').then((response)=>{
-    //     this.setState({repoList:[...response.data]});
-    //     this.setState({error:''});
-    //   })
-    //   .catch(error=>{
-    //     console.log(error);
-    //       this.setState({error:error.response.status});
-    //   })
 }

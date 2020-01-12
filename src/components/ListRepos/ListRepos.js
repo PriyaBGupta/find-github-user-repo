@@ -1,5 +1,6 @@
 import React from 'react';
-const ListRepos= (props)=>{
+import PropTypes from 'prop-types';
+const ListRepos = (props) => {
     return(
         <div className="card">
             <div className="card-body">
@@ -7,5 +8,8 @@ const ListRepos= (props)=>{
             </div>
         </div>
     )
+}
+ListRepos.propTypes = {
+    name:PropTypes.string.isRequired
 }
 export default ListRepos

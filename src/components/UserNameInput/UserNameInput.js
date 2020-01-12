@@ -2,7 +2,7 @@ import React, { Fragment, Component } from 'react';
 import {AsyncTypeahead} from 'react-bootstrap-typeahead';
 import GithubMenuItem from '../GithubMenuItem/GithubMenuItem';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import makeAndHandleRequest from '../../util/makeAndHandleRequest';
+import makeAndHandleRequest from '../../util/makeAndHandleSearch';
 import ListRepos from '../ListRepos/ListRepos';
 import makeAndHandleRepo from '../../util/makeAndHandleRepo';
 

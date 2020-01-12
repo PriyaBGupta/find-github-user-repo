@@ -1,70 +1,102 @@
-import React, { Component, Fragment } from 'react';
-import UserNameInput from '../components/UserNameInput/UserNameInput';
-import './App.css';
+import React, {Component } from 'react';
+
+import {AsyncTypeahead} from 'react-bootstrap-typeahead';
+import 'react-bootstrap-typeahead/css/Typeahead.css';
+
+import SearchList from '../components/SearchList/SearchList';
 import ListRepos from '../components/ListRepos/ListRepos';
+import makeAndHandleRequest from '../util/makeAndHandleSearch';
+import makeAndHandleRepo from '../util/makeAndHandleRepo';
+
+import './App.css';
 
 class App extends Component{
-  state = {
-    userName:'',
-    repoList:null,
-    error:''
+//properties  
+state = {
+  isLoading: false,
+  options: [],
+  repoList:null,
+  error:false
+};
+
+//methods
+handleSearch = (query) => {
+  this.setState({isLoading: true});
+  makeAndHandleRequest(query)
+    .then(({options}) => {
+      this.setState({
+        isLoading: false,
+        error: false,
+        options: [...options],
+      });
+    })
+    .catch(err => {
+      this.setState({error:true});
+    });
+}
+handleSelection = (selected) =>{
+  if(selected[0]){
+    this.setState({
+      isLoading: true
+    });
+    makeAndHandleRepo(selected[0].login)
+    .then(response => {
+      this.setState({
+        error:false,
+        isLoading:false,
+        repoList:[...response.repo]
+      });
+    })
+    .catch(err => {
+      this.setState({error:true});
+    });
   }
-  nameChangeHandler=(event)=>{
-    this.setState({userName:event.target.value});
+  else{
+    this.setState({
+      repoList: null
+    });
   }
-  enterHandler=(username)=>{
-    //const code = event.keyCode || event.which;
-    //if(code === 13) {
-      this.setState({userName:username});
-  }
-  // shouldComponentUpdate(nextProps,nextState){
-  //   console.log(nextState.userName , this.state.userName);
-  //   if(nextState.userName!==this.state.userName){
-  //     return true;
-  //   }else return false;
-  // }
-  // componentDidUpdate(){
-  //   if(this.state.userName){
-  //     console.log("Have I been called");
-  //     axios.get('https://api.github.com/users/'+ this.state.userName +'/repos').then((response)=>{
-  //       this.setState({repoList:[...response.data]});
-  //       this.setState({error:''});
-  //     })
-  //     .catch(error=>{
-  //       console.log(error);
-  //         this.setState({error:error.response.status});
-  //     })
-  // }
-  // }
-  render(){
-    
-    let repoListDisplay = null;
-    if(this.state.error ===''){
-      if(this.state.repoList){
-        if(this.state.repoList.length>0){
-          repoListDisplay = this.state.repoList.map(repo=>(
-          <ListRepos name={repo.name} key={repo.created_at}></ListRepos>
-          ))
-        }
-        else{
-          repoListDisplay = <p>Username doesnt have any repository to show</p>
-        }
+}
+
+render(){
+
+  let repoListDisplay = null;
+  if(!this.state.error){
+    if(this.state.repoList){
+      if(this.state.repoList.length>0){
+        repoListDisplay = this.state.repoList.map(repo=>(
+        <ListRepos name={repo.name} key={repo.id}></ListRepos>
+        ))
+      }
+      else{
+        repoListDisplay = <p>Username doesnt have any repository to show</p>
       }
     }
-    else if(this.state.error === 404){
-      repoListDisplay=<p>UserName not found</p>
-    }
-    else {
-      repoListDisplay =<p>Opps dear !! Something went wrong. Try again later</p>
-    }
-    return(
-      <Fragment>
-        <h3>Github Repo User Finder</h3>
-        <UserNameInput username={this.state.userName} changed={this.nameChangeHandler} entered = {this.enterHandler}/>
-          {repoListDisplay}
-      </Fragment>
-    );
   }
+  else {
+    repoListDisplay =<p>Opps dear !! Something went wrong. Try again later</p>
+  }
+
+  return(
+      <div className="container github-repo-container">
+        <h2 className="text-center m-4">Github Username Repository Finder</h2>
+        <AsyncTypeahead
+        {...this.state}
+        id="github-user-typeahead"
+        labelKey="login"
+        minLength={1}
+        onSearch={this.handleSearch}
+        selectHintOnEnter
+        placeholder="Search for a Github user"
+        onChange={this.handleSelection}
+        renderMenuItemChildren={(option) => (
+          <SearchList key={option.id} user={option}/>
+        )}
+        />
+        {repoListDisplay}
+      </div>
+    )
+}
 }
 
 export default App;
