@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/find-github-user-repo/static/css/main.1aa49fb8.chunk.css",
+    "main.js": "/find-github-user-repo/static/js/main.61c737eb.chunk.js",
+    "main.js.map": "/find-github-user-repo/static/js/main.61c737eb.chunk.js.map",
+    "runtime-main.js": "/find-github-user-repo/static/js/runtime-main.519a2b8d.js",
+    "runtime-main.js.map": "/find-github-user-repo/static/js/runtime-main.519a2b8d.js.map",
+    "static/css/2.6b0ae61b.chunk.css": "/find-github-user-repo/static/css/2.6b0ae61b.chunk.css",
+    "static/js/2.f9c4cd76.chunk.js": "/find-github-user-repo/static/js/2.f9c4cd76.chunk.js",
+    "static/js/2.f9c4cd76.chunk.js.map": "/find-github-user-repo/static/js/2.f9c4cd76.chunk.js.map",
+    "index.html": "/find-github-user-repo/index.html",
+    "precache-manifest.7cd6b2901b75cd6561defe1ff36c59ae.js": "/find-github-user-repo/precache-manifest.7cd6b2901b75cd6561defe1ff36c59ae.js",
+    "service-worker.js": "/find-github-user-repo/service-worker.js",
+    "static/css/2.6b0ae61b.chunk.css.map": "/find-github-user-repo/static/css/2.6b0ae61b.chunk.css.map",
+    "static/css/main.1aa49fb8.chunk.css.map": "/find-github-user-repo/static/css/main.1aa49fb8.chunk.css.map",
+    "static/js/2.f9c4cd76.chunk.js.LICENSE": "/find-github-user-repo/static/js/2.f9c4cd76.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.519a2b8d.js",
+    "static/css/2.6b0ae61b.chunk.css",
+    "static/js/2.f9c4cd76.chunk.js",
+    "static/css/main.1aa49fb8.chunk.css",
+    "static/js/main.61c737eb.chunk.js"
+  ]
+}
