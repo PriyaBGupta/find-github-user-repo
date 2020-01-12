@@ -17,7 +17,7 @@ const SearchList = (props) => {
 SearchList.propTypes = {
   user: PropTypes.shape({
     login: PropTypes.string.isRequired,
-    avatarUrl:PropTypes.string.isRequired
+    avatarUrl: PropTypes.string.isRequired
   }).isRequired
 };
 

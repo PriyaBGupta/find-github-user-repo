@@ -15,9 +15,9 @@ class App extends Component{
 state = {
   isLoading: false,
   options: [],
-  username:'',
-  repoList:null,
-  error:false
+  username: '',
+  repoList: null,
+  error: false
 };
 
 //methods
@@ -32,12 +32,15 @@ handleSearch = (query) => {
       });
     })
     .catch(err => {
-      this.setState({error:true});
+      this.setState({error: true});
     });
 }
-handleSelection = (selected) =>{
+handleSelection = (selected) => {
   if(selected[0]){
-    this.setState({username : selected[0].login});
+    this.setState({
+      username: selected[0].login,
+      error: false
+    });
   }
   else{
     this.setState({
@@ -51,12 +54,12 @@ componentDidUpdate(prevProps,prevState){
     makeAndHandleRepo(this.state.username)
     .then(response => {
       this.setState({
-        error:false,
-        repoList:[...response.repo]
+        error: false,
+        repoList: [...response.repo]
       });
     })
     .catch(err => {
-      this.setState({error:true});
+      this.setState({error: true});
     });
   }
 }
@@ -67,19 +70,19 @@ render(){
   let repoListTitle = null;
   if(!this.state.error){
     if(this.state.repoList){
-      if(this.state.repoList.length>0){
+      if(this.state.repoList.length > 0){
         repoListTitle = <h5 className="text-center github-repository-title">Repository of {this.state.username}</h5>
-        repoListDisplay = this.state.repoList.map(repo=>(
+        repoListDisplay = this.state.repoList.map(repo => (
         <ListRepos repoInfo={repo} key={repo.id}></ListRepos>
         ))
       }
       else{
-        repoListDisplay = <p>Username doesnt have any repository to show</p>
+        repoListDisplay = <div className="alert alert-info" role="alert">Username doesnt have any repository to show</div>
       }
     }
   }
   else {
-    repoListDisplay =<p>Opps dear !! Something went wrong. Try again later</p>
+    repoListDisplay = <div className="alert alert-warning" role="alert">Opps dear !! Something went wrong. Try again later</div>
   }
 
   return(
