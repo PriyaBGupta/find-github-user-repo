@@ -89,7 +89,7 @@ render(){
       <div className="container github-repo-container">
         <h2 className="text-center m-4 github-title">Github Username Repository Finder</h2>
         <div className="row justify-content-center">
-          <div className="col-6">
+          <div className="col col-sm-6">
             <AsyncTypeahead
             {...this.state}
             id="github-user-typeahead"
@@ -105,7 +105,7 @@ render(){
             />
           </div>
           <div className="w-100"></div>
-          <div className="col-6 py-4" >
+          <div className="col col-sm-6 py-4" >
             {repoListTitle}
             {repoListDisplay}
           </div>
